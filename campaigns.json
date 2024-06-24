@@ -1,0 +1,228 @@
+{
+    "html": {
+      "doctype": "<!DOCTYPE html>",
+      "html_open": "<html lang=\"en\">",
+      "head": {
+        "meta": [
+          "<meta charset=\"UTF-8\">",
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+        ],
+        "title": "<title>Campaign Creator</title>",
+        "link": "<link rel=\"stylesheet\" href=\"styles.css\">"
+      },
+      "body_open": "<body>",
+      "overlay": "<div id=\"overlay\"></div>",
+      "campaign_container": {
+        "id": "campaignContainer",
+        "content": [
+          "<button id=\"createCampaignBtn\" class=\"draggable\">Create Campaign</button>"
+        ]
+      },
+      "popups": [
+        {
+          "id": "selectTypePopup",
+          "class": "popup",
+          "content": [
+            "<h3>Select Campaign Type</h3>",
+            "<button onclick=\"selectCampaignType('email')\">Email</button>",
+            "<button onclick=\"selectCampaignType('sms')\">SMS</button>",
+            "<button onclick=\"selectCampaignType('whatsapp')\">WhatsApp</button>"
+          ]
+        },
+        {
+          "id": "inputPopup",
+          "class": "popup",
+          "content": [
+            "<h3>Enter Campaign Details</h3>",
+            "<div id=\"inputContainer\"></div>",
+            "<button id=\"submitInputs\">Create Campaign</button>"
+          ]
+        },
+        {
+          "id": "selectDripPopup",
+          "class": "popup",
+          "content": [
+            "<h3>Select Drip Campaign Type</h3>",
+            "<label><input type=\"checkbox\" id=\"emailDripCheckbox\"> Email Drip Campaign</label>",
+            "<label><input type=\"checkbox\" id=\"smsDripCheckbox\"> SMS Drip Campaign</label>",
+            "<label><input type=\"checkbox\" id=\"whatsappDripCheckbox\"> WhatsApp Drip Campaign</label>",
+            "<button id=\"submitDripSelection\">Select Drip Campaign</button>"
+          ]
+        }
+      ],
+      "script": [
+        "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js\"></script>",
+        "<script src=\"script.js\"></script>"
+      ],
+      "body_close": "</body>",
+      "html_close": "</html>"
+    },
+    "css": {
+      "styles": [
+        "body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }",
+        "#campaignContainer { position: relative; width: 90%; height: 90vh; background: #fff; border: 1px solid #ddd; padding-top: 50px; overflow: hidden; border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }",
+        ".draggable { padding: 10px 20px; border: 2px solid #ddd; background-color: #4CAF50; color: #fff; border-radius: 8px; cursor: move; margin: 10px; text-align: center; position: absolute; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.2s ease, background-color 0.2s ease; }",
+        ".draggable:hover { transform: scale(1.05); background-color: #45a049; }",
+        ".popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); padding: 20px; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; display: none; border-radius: 8px; transition: transform 0.3s ease; }",
+        ".popup.show { display: block; transform: translate(-50%, -50%) scale(1); }",
+        ".popup h3 { margin-top: 0; }",
+        ".popup input[type=\"text\"] { display: block; margin: 10px 0; padding: 5px; width: 100%; border: 1px solid #ddd; border-radius: 4px; }",
+        ".popup button { padding: 10px 20px; background: #4CAF50; color: #fff; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.2s ease; }",
+        ".popup button:hover { background: #45a049; }",
+        ".popup input[type=\"checkbox\"] { margin: 10px 0; }",
+        "#overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 500; display: none; transition: opacity 0.3s ease; }",
+        "#overlay.show { display: block; opacity: 1; }",
+        ".add-button { background: #007BFF; color: white; border: none; cursor: pointer; margin-top: 10px; padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; font-size: 20px; line-height: 0; transition: background-color 0.2s ease, transform 0.2s ease; }",
+        ".add-button:hover { background: #0056b3; transform: scale(1.1); }",
+        ".campaign-email { background-color: #2196F3; }",
+        ".campaign-sms { background-color: #FFC107; }",
+        ".campaign-whatsapp { background-color: #25D366; }"
+      ]
+    },
+    "js": {
+      "script": [
+        "let lines = [];",
+        "let previousElement = null;",
+        "let selectedCampaignElement = null;",
+        "document.getElementById('createCampaignBtn').addEventListener('click', function () {",
+        "    previousElement = null; // Reset previous element for the first campaign",
+        "    showPopup('selectTypePopup');",
+        "});",
+        "function showPopup(popupId) {",
+        "    document.getElementById('overlay').classList.add('show');",
+        "    document.getElementById(popupId).classList.add('show');",
+        "}",
+        "function hidePopup() {",
+        "    document.querySelectorAll('.popup').forEach(popup => {",
+        "        popup.classList.remove('show');",
+        "    });",
+        "    document.getElementById('overlay').classList.remove('show');",
+        "}",
+        "document.getElementById('overlay').addEventListener('click', hidePopup);",
+        "function selectCampaignType(type) {",
+        "    hidePopup();",
+        "    showPopup('inputPopup');",
+        "    const inputContainer = document.getElementById('inputContainer');",
+        "    inputContainer.innerHTML = '';",
+        "    for (let i = 1; i <= 10; i++) {",
+        "        const input = document.createElement('input');",
+        "        input.type = 'text';",
+        "        input.placeholder = Input ${i};",
+        "        inputContainer.appendChild(input);",
+        "    }",
+        "    document.getElementById('submitInputs').onclick = function () {",
+        "        createCampaign(type);",
+        "    };",
+        "}",
+        "function createCampaign(type) {",
+        "    hidePopup();",
+        "    const container = document.getElementById('campaignContainer');",
+        "    const createdCampaign = document.createElement('div');",
+        "    createdCampaign.className = draggable campaign-${type};",
+        "    createdCampaign.innerText = ${capitalizeFirstLetter(type)} Campaign;",
+  
+        "    const addButton = document.createElement('button');",
+        "    addButton.innerText = '+';",
+        "    addButton.className = 'add-button';",
+        "    createdCampaign.appendChild(addButton);",
+  
+        "    container.appendChild(createdCampaign);",
+  
+        "    positionElement(createdCampaign);",
+  
+        "    addButton.addEventListener('click', function () {",
+        "        selectedCampaignElement = createdCampaign;",
+        "        showPopup('selectDripPopup');",
+        "    });",
+  
+        "    addDraggable(createdCampaign);",
+  
+        "    const line = new LeaderLine(",
+        "        document.getElementById('createCampaignBtn'),",
+        "        createdCampaign,",
+        "        {",
+        "            startSocket: 'bottom',",
+        "            endSocket: 'top',",
+        "            color: '#4CAF50',",
+        "            path: 'straight',",
+        "            dash: { animation: true }",
+        "        }",
+        "    );",
+        "    lines.push(line);",
+  
+        "    previousElement = createdCampaign;",
+        "}",
+        "document.getElementById('submitDripSelection').addEventListener('click', function () {",
+        "    hidePopup();",
+        "    const isEmailDrip = document.getElementById('emailDripCheckbox').checked;",
+        "    const isSmsDrip = document.getElementById('smsDripCheckbox').checked;",
+        "    const isWhatsappDrip = document.getElementById('whatsappDripCheckbox').checked;",
+  
+        "    let dripText = '';",
+        "    if (isEmailDrip) dripText += ' (Email Drip)';",
+        "    if (isSmsDrip) dripText += ' (SMS Drip)';",
+        "    if (isWhatsappDrip) dripText += ' (WhatsApp Drip)';",
+  
+        "    selectedCampaignElement.querySelector('.drip-text')?.remove(); // Remove any existing drip-text element",
+        "    const dripTextElement = document.createElement('span');",
+        "    dripTextElement.className = 'drip-text';",
+        "    dripTextElement.innerText = dripText;",
+        "    selectedCampaignElement.appendChild(dripTextElement);",
+  
+        "    // Clear the checkboxes after selection",
+        "    document.getElementById('emailDripCheckbox').checked = false;",
+        "    document.getElementById('smsDripCheckbox').checked = false;",
+        "    document.getElementById('whatsappDripCheckbox').checked = false;",
+  
+        "    // Ensure the addButton remains functional",
+        "    selectedCampaignElement.querySelector('.add-button').addEventListener('click', function () {",
+        "        selectedCampaignElement = createdCampaign;",
+        "        showPopup('selectDripPopup');",
+        "    });",
+        "});",
+        "function capitalizeFirstLetter(string) {",
+        "    return string.charAt(0).toUpperCase() + string.slice(1);",
+        "}",
+        "function positionElement(element) {",
+        "    const containerRect = document.getElementById('campaignContainer').getBoundingClientRect();",
+        "    const elementRect = element.getBoundingClientRect();",
+        "    element.style.top = ${Math.random() * (containerRect.height - elementRect.height)}px;",
+        "    element.style.left = ${Math.random() * (containerRect.width - elementRect.width)}px;",
+        "}",
+        "function addDraggable(element) {",
+        "    element.draggable = true;",
+  
+        "    element.addEventListener('dragstart', function (event) {",
+        "        event.dataTransfer.setData('text/plain', null); // Required for Firefox",
+        "        element.classList.add('dragging');",
+        "    });",
+  
+        "    element.addEventListener('dragend', function () {",
+        "        element.classList.remove('dragging');",
+        "        updateLines();",
+        "    });",
+  
+        "    document.getElementById('campaignContainer').addEventListener('dragover', function (event) {",
+        "        event.preventDefault();",
+        "    });",
+  
+        "    document.getElementById('campaignContainer').addEventListener('drop', function (event) {",
+        "        event.preventDefault();",
+        "        const dragging = document.querySelector('.dragging');",
+        "        if (dragging) {",
+        "            dragging.style.top = ${event.clientY - dragging.offsetHeight / 2}px;",
+        "            dragging.style.left = ${event.clientX - dragging.offsetWidth / 2}px;",
+        "            updateLines();",
+        "        }",
+        "    });",
+        "}",
+        "function updateLines() {",
+        "    lines.forEach(line => line.position());",
+        "}",
+        "addDraggable(document.getElementById('createCampaignBtn'));"
+      ]
+    }
+  }
+  
+
+

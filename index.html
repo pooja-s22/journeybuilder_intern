@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Creator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="campaignContainer">
+        <button id="createCampaignBtn" class="draggable"><i class="fas fa-plus-circle"></i> Create Campaign</button>
+    </div>
+
+    <!-- Popups -->
+    <div id="selectTypePopup" class="popup">
+        <h3>Select Campaign Type</h3>
+        <button onclick="selectCampaignType('email')"><i class="fas fa-envelope"></i> Email</button>
+        <button onclick="selectCampaignType('sms')"><i class="fas fa-sms"></i> SMS</button>
+        <button onclick="selectCampaignType('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+    </div>
+
+    <div id="inputPopup" class="popup">
+        <h3>Enter Campaign Details</h3>
+        <div id="inputContainer"></div>
+        <button id="submitInputs"><i class="fas fa-check-circle"></i> Create Campaign</button>
+    </div>
+
+    <div id="selectDripPopup" class="popup">
+        <h3>Select Drip Campaign Type</h3>
+        <label><input type="checkbox" id="emailDripCheckbox"> <i class="fas fa-envelope"></i> Email Drip Campaign</label>
+        <label><input type="checkbox" id="smsDripCheckbox"> <i class="fas fa-sms"></i> SMS Drip Campaign</label>
+        <label><input type="checkbox" id="whatsappDripCheckbox"> <i class="fab fa-whatsapp"></i> WhatsApp Drip Campaign</label>
+        <button id="submitDripSelection"><i class="fas fa-check-circle"></i> Select Drip Campaign</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
